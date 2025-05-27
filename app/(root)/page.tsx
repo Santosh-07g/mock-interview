@@ -9,13 +9,13 @@ import {getCurrentUser} from "@/lib/actions/auth.action";
 const Page = async () => {
     const user = await getCurrentUser();
 
-    const [userInterviews,latestInterviews ] = await Promise.all([
+    const [userInterviews,allInterview ] = await Promise.all([
         await getInterviewsByUserId(user?.id!),
-        await getLatestInterviews({ userId: user?.id! })
+        await getLatestInterviews({ userId: user?.id! }),
     ]);
 
     const hasPastInterviews = userInterviews ?.length > 0;
-    const hasUpcomingInterviews = latestInterviews ?.length > 0;
+    const hasUpcomingInterviews = allInterview ?.length > 0;
     return (
         <>
             <section className="card-cta">
@@ -48,7 +48,7 @@ const Page = async () => {
                 <h2>Take an interview</h2>
                 <div className="interviews-section">
                     {hasUpcomingInterviews ? (
-                        latestInterviews?.map((interview) => (
+                        allInterview?.map((interview) => (
                             <InterviewCard {...interview}  key={interview.id} />
                         ))) : (
                         <p>There are no new interviews available</p>
