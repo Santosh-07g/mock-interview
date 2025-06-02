@@ -100,7 +100,7 @@ export const mappings = {
 };
 
 export const generator: CreateWorkflowDTO = {
-  "name": "interview",
+  "name": "AI Interview Generator",
   "nodes": [
     {
       "name": "introduction",
@@ -108,35 +108,11 @@ export const generator: CreateWorkflowDTO = {
       "isStart": true,
       "metadata": {
         "position": {
-          "x": -1114.6666364317318,
-          "y": -318.66665741567914
+          "x": -633.3333027035404,
+          "y": -565.3332852169182
         }
       },
-      "prompt": "Hello, {{username}} lets prepare your interview. i will ask you a few questions and generate a  perfect interview just for you. Are you ready?",
-      "model": {
-        "model": "gpt-4o",
-        "provider": "openai",
-        "maxTokens": 1000,
-        "temperature": 0.7
-      },
-      "voice": {
-        "voiceId": "Neha",
-        "provider": "vapi"
-      },
-      "messagePlan": {
-        "firstMessage": "Hey there!"
-      }
-    },
-    {
-      "name": "conversation_1748766557774",
-      "type": "conversation",
-      "metadata": {
-        "position": {
-          "x": -1115.489167031711,
-          "y": -64.95793393927057
-        }
-      },
-      "prompt": "",
+      "prompt": "Hello! I'm your AI Interview Assistant. Let's create a new interview together. \nCould you please tell me:\n- The **job role** you are preparing for (e.g., Frontend, Backend, Fullstack)?\n- The **experience level** (entry, mid, senior)?\n- The **technologies** you want to cover (e.g., React, Node.js)?\n- The **type** of interview you'd like (behavioral, technical, or mixed)?\n- And how many **questions** you’d like me to generate?\n",
       "model": {
         "model": "gpt-4o",
         "provider": "openai",
@@ -153,115 +129,52 @@ export const generator: CreateWorkflowDTO = {
             "enum": [],
             "type": "string",
             "title": "role",
-            "description": "what role would you like to train for ?"
+            "description": ""
           },
           {
-            "enum": [],
-            "type": "string",
-            "title": "type",
-            "description": "Are you aiming for technical, behavioral or mixed interview?"
-          },
-          {
-            "enum": [],
+            "enum": [
+              " entry, mid, senior"
+            ],
             "type": "string",
             "title": "level",
-            "description": "Job experience level ?"
-          },
-          {
-            "enum": [],
-            "type": "string",
-            "title": "amount",
-            "description": "How many questions would you like me to prepare you?"
+            "description": ""
           },
           {
             "enum": [],
             "type": "string",
             "title": "techstack",
-            "description": "A list of technology to cover during a job interview"
+            "description": ""
+          },
+          {
+            "enum": [
+              " behavioral, technical, mixed"
+            ],
+            "type": "string",
+            "title": "type",
+            "description": ""
+          },
+          {
+            "enum": [],
+            "type": "number",
+            "title": "amount",
+            "description": ""
           }
         ]
       },
       "messagePlan": {
-        "firstMessage": ""
+        "firstMessage": "Hey there!"
       }
     },
     {
-      "name": "API Request",
-      "type": "tool",
-      "metadata": {
-        "position": {
-          "x": -1299.195502496209,
-          "y": 196.10820569392675
-        }
-      },
-      "tool": {
-        "url": "https://mock-interview-dusky-two.vercel.app/api/vapi/generate",
-        "body": {
-          "type": "object",
-          "required": [
-            "role",
-            "type",
-            "level",
-            "amount",
-            "userid",
-            "techstack"
-          ],
-          "properties": {
-            "role": {
-              "type": "string",
-              "value": "{{role}}",
-              "description": ""
-            },
-            "type": {
-              "type": "string",
-              "value": "{{ type }}",
-              "description": ""
-            },
-            "level": {
-              "type": "string",
-              "value": "{{level}}",
-              "description": ""
-            },
-            "amount": {
-              "type": "string",
-              "value": "{{ amount }}",
-              "description": ""
-            },
-            "userid": {
-              "type": "string",
-              "value": "{{ userid }}",
-              "description": ""
-            },
-            "techstack": {
-              "type": "string",
-              "value": "{{techstack}}",
-              "description": ""
-            }
-          }
-        },
-        "name": "Interview Generator",
-        "type": "apiRequest",
-        "method": "POST",
-        "function": {
-          "name": "untitled_tool",
-          "parameters": {
-            "type": "object",
-            "required": [],
-            "properties": {}
-          }
-        }
-      }
-    },
-    {
-      "name": "conversation_1748767209408",
+      "name": "conversation_1748876012334",
       "type": "conversation",
       "metadata": {
         "position": {
-          "x": -1093.6505367320833,
-          "y": 435.04206606072944
+          "x": -348.0000306297925,
+          "y": -37.99997895964496
         }
       },
-      "prompt": "say that the interview has been generated and thank the user for the call",
+      "prompt": "Great! Let me confirm:\n- **Role**: {{ role }}\n- **Experience Level**: {{ level }}\n- **Technologies**: {{ techstack }}\n- **Interview Type**: {{ type }}\n- **Number of Questions**: {{ amount }}\n\nI’ll now prepare your interview. Please hold on!",
       "model": {
         "model": "gpt-4o",
         "provider": "openai",
@@ -277,12 +190,102 @@ export const generator: CreateWorkflowDTO = {
       }
     },
     {
-      "name": "hangup_1748767222239",
+      "name": "API Request",
       "type": "tool",
       "metadata": {
         "position": {
-          "x": -1096.8906320421884,
-          "y": 679.026902146407
+          "x": -683.9999879849979,
+          "y": 366.6666680768782
+        }
+      },
+      "tool": {
+        "url": "https://mock-interview-dusky-two.vercel.app/api/vapi/generate",
+        "body": {
+          "type": "object",
+          "required": [
+            "role",
+            "amount",
+            "techstack",
+            "type",
+            "level",
+            "userid"
+          ],
+          "properties": {
+            "role": {
+              "type": "string",
+              "value": "{{role}}",
+              "description": ""
+            },
+            "type": {
+              "type": "string",
+              "value": "{{type}}",
+              "description": ""
+            },
+            "level": {
+              "type": "string",
+              "value": "",
+              "description": ""
+            },
+            "amount": {
+              "type": "string",
+              "value": "{{amount}}",
+              "description": ""
+            },
+            "userid": {
+              "type": "string",
+              "value": "{{ userid }}",
+              "description": ""
+            },
+            "techstack": {
+              "type": "string",
+              "value": "{{techstack}}",
+              "description": ""
+            }
+          }
+        },
+        "type": "apiRequest",
+        "method": "POST",
+        "function": {
+          "name": "untitled_tool",
+          "parameters": {
+            "type": "object",
+            "required": [],
+            "properties": {}
+          }
+        }
+      }
+    },
+    {
+      "name": "conversation_1748876543810",
+      "type": "conversation",
+      "metadata": {
+        "position": {
+          "x": -1153.333261750999,
+          "y": 637.9999987026055
+        }
+      },
+      "prompt": "Thank you! The AI Interview has been generated successfully. Good luck with your preparation!\n",
+      "model": {
+        "model": "gpt-4o",
+        "provider": "openai",
+        "maxTokens": 1000,
+        "temperature": 0.7
+      },
+      "voice": {
+        "voiceId": "Neha",
+        "provider": "vapi"
+      },
+      "messagePlan": {
+        "firstMessage": "success"
+      }
+    },
+    {
+      "name": "hangup_1748876591045",
+      "type": "tool",
+      "metadata": {
+        "position": {
+          "x": -591.9999879849979,
+          "y": 866.6666680768782
         }
       },
       "tool": {
@@ -293,34 +296,34 @@ export const generator: CreateWorkflowDTO = {
   "edges": [
     {
       "from": "introduction",
-      "to": "conversation_1748766557774",
+      "to": "conversation_1748876012334",
       "condition": {
         "type": "ai",
-        "prompt": ""
+        "prompt": "if the user said yes"
       }
     },
     {
-      "from": "conversation_1748766557774",
+      "from": "conversation_1748876012334",
       "to": "API Request",
       "condition": {
         "type": "ai",
-        "prompt": ""
-      }
-    },
-    {
-      "from": "conversation_1748767209408",
-      "to": "hangup_1748767222239",
-      "condition": {
-        "type": "ai",
-        "prompt": ""
+        "prompt": "if the user said yes"
       }
     },
     {
       "from": "API Request",
-      "to": "conversation_1748767209408",
+      "to": "conversation_1748876543810",
       "condition": {
         "type": "ai",
-        "prompt": ""
+        "prompt": "if the user said yes"
+      }
+    },
+    {
+      "from": "conversation_1748876543810",
+      "to": "hangup_1748876591045",
+      "condition": {
+        "type": "ai",
+        "prompt": "if the user said yes"
       }
     }
   ],
