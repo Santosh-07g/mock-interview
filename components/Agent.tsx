@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 
 import { cn } from "@/lib/utils";
 import { vapi } from "@/lib/vapi.sdk";
-import {generator, interviewer } from "@/constants";
+import { interviewer } from "@/constants";
 import { createFeedback } from "@/lib/actions/general.action";
 
 enum CallStatus {
@@ -129,9 +129,8 @@ const Agent = ({
                     serverMessages: [],
                 },
                 undefined,
-                generator
+                process.env.NEXT_PUBLIC_VAPI_WORKFLOW_ID!
             );
-
         } else {
             let formattedQuestions = "";
             if (questions) {
@@ -177,7 +176,7 @@ const Agent = ({
                 <div className="card-border">
                     <div className="card-content">
                         <Image
-                            src="/user-avatar.png"
+                            src="/User.jpg"
                             alt="profile-image"
                             width={539}
                             height={539}
